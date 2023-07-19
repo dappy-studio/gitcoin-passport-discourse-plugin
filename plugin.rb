@@ -6,6 +6,7 @@
 # authors: Spect
 # url: https://passport.gitcoin.co/
 # required_version: 2.7.0
+require 'ostruct'
 
 enabled_site_setting :gitcoin_passport_enabled
 
@@ -95,7 +96,14 @@ after_initialize do
 
       def after_create_account(user, auth)
         if SiteSetting.gitcoin_passport_enabled
-          score = DiscourseGitcoinPassport::Passport.score(auth[:extra_data][:uid], SiteSetting.gitcoin_passport_scorer_id)
+          user_hash = user.attributes
+          user_hash["associated_accounts"] = [{
+            name: "siwe",
+            description: auth[:extra_data][:uid]
+          }]
+          user_ostruct = OpenStruct.new(user_hash)
+
+          score = DiscourseGitcoinPassport::Passport.refresh_passport_score(user_ostruct)
           if !score
             score = 0
           end
