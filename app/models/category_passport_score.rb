@@ -1,14 +1,14 @@
 class CategoryPassportScore < ActiveRecord::Base
   belongs_to :category
 
-  validates :required_score,
-  numericality: {
-    greater_than_or_equal_to: 0,
-    less_than_or_equal_to: 100,
-    allow_nil: false,
-  }
+  validate :validate_required_score
   validates :category_id, uniqueness: { scope: :user_action_type }
 
+  def validate_required_score
+    if self.required_score < 0 || self.required_score > 100
+      errors.add(:required_score, I18n.t("errors.score_not_between_required_range"))
+    end
+  end
 end
 
 

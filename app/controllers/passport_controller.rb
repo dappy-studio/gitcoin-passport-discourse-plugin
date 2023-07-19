@@ -33,25 +33,19 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
         render json: { status: 403, error: "You must be an admin to access this resource" }
         return
       end
-
-      user_passport_score = UserPassportScore.where(user_id: params[:user_id], user_action_type: params[:action_id])
-      if user_passport_score.exists?
-        user_passport_score.first.required_score = params[:score]
-        user_passport_score.first.save
-        render json: {
-          user_passport_score: user_passport_score.first
-        }
+      user_passport_scores = UserPassportScore.where(user_id: params[:user_id], user_action_type: params[:action_id])
+      if user_passport_scores.exists?
+        user_passport_score = user_passport_scores.first
       else
         user_passport_score = UserPassportScore.new
-
-        user_passport_score.required_score = params[:score]
         user_passport_score.user_id = params[:user_id]
         user_passport_score.user_action_type = params[:action_id]
-
-        user_passport_score.save
-        render json: {
-                  user_passport_score: user_passport_score
-              }
+      end
+      user_passport_score.required_score = params[:score]
+      if user_passport_score.save
+        return user_passport_score
+      else
+        raise DiscourseGitcoinPassport::Error.new(user_passport_score.errors.full_messages.join(", "))
       end
     rescue DiscourseGitcoinPassport::Error => e
       render_json_error e.message
@@ -75,25 +69,20 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
         return
       end
 
-      category_passport_score = CategoryPassportScore.where(category_id: params[:category_id], user_action_type: params[:action_id])
 
-      if (category_passport_score.exists?)
-        category_passport_score.first.required_score = params[:score]
-        category_passport_score.first.save
-        render json: {
-          category_passport_score: category_passport_score.first
-        }
+      category_passport_scores = CategoryPassportScore.where(category_id: params[:category_id], user_action_type: params[:action_id])
+      if category_passport_scores.exists?
+        category_passport_score = category_passport_scores.first
       else
-        category_passport_score = CategoryPassportScore.new
-
-        category_passport_score.required_score = params[:score]
+        category_passport_score = UserPassportScore.new
         category_passport_score.category_id = params[:category_id]
         category_passport_score.user_action_type = params[:action_id]
-
-        category_passport_score.save
-        render json: {
-            category_passport_score: category_passport_score
-              }
+      end
+      category_passport_score.required_score = params[:score]
+      if category_passport_score.save
+        return category_passport_score
+      else
+        raise DiscourseGitcoinPassport::Error.new(category_passport_score.errors.full_messages.join(", "))
       end
     rescue DiscourseGitcoinPassport::Error => e
       render_json_error e.message

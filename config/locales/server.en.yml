@@ -17,3 +17,5 @@ en:
     has_not_connected_wallet: "Please connect your wallet to login to the forum."
     create_account_wallet_not_connected: "You must connect your wallet to create an account"
     create_account_minimum_score_not_satisfied: "You dont have the required Gitcoin Passport score to create an account. Your current Gitcoin Passport score is %{score}. The required score is %{required_score}. Please visit https://passport.gitcoin.co/ and collect stamps, then come back and try again."
+  errors:
+    score_not_between_required_range: "must be between 0 and 100"
