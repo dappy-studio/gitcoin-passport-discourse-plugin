@@ -1,0 +1,9 @@
+<div class="user-summary-passport-score-container">
+  <UserStat @value={{this.score}} @label="gitcoin_passport.summary.score" />
+  <DButton
+    @class="btn-primary digest-refresh-button"
+    @action={{action "refreshScore"}}
+    @label="gitcoin_passport.summary.refresh"
+    @isLoading={{this.refreshingScore}}
+  />
+</div>

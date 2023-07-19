@@ -1,0 +1,33 @@
+.create-account-feedback-message {
+  padding: 15px;
+  padding-top: 0px;
+  padding-bottom: 4px;
+  background-color: var(--secondary);
+}
+
+.scores-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.score-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 4px;
+  gap: 10px;
+}
+
+.score {
+  font-size: 1em;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.message {
+  font-size: 1em;
+  font-weight: normal;
+  color: var(--primary);
+}

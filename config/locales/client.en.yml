@@ -1,0 +1,46 @@
+en:
+  js:
+    gitcoin_passport:
+      url: "https://passport.gitcoin.co/"
+      go_to_passport: "Get Passport Stamps"
+      summary:
+        score: "Gitcoin Passport Score"
+        refresh: "Refresh"
+      wallet_not_connected_error: "This action requires you to connect your wallet. Please click the 'Sign in With Ethereum' button to connect your wallet."
+      score:
+        user_score: "Your Gitcoin Passport Score"
+        minimum_required_score: "Minimum Score Required"
+        not_satisfied: "This action requires you to have a minimum score on Gitcoin Passport."
+        wallet_not_connected: "Please connect your wallet to view your score."
+      error_while_fetching_voters: "Sorry, there was an error displaying the voters."
+      buttons:
+        check_score: "Check Score"
+      create_account_modal:
+        heading: "GM!"
+        subheading: "You need to meet a minimum score on Gitcoin Passport to create an account on this forum."
+        current_passport_score_requirement_text: "Current Passport Score Requirement"
+      user_level_settings:
+        heading: "Sybil Protection"
+        minimum_score_to_post: "Minimum score to post"
+        minimum_score_to_post_description: "Users must have this score on Gitcoin Passport to post on forum"
+        minimum_score_to_create_topic: "Minimum score to create a new topic"
+        minimum_score_to_create_topic_description: "Users must have this score on Gitcoin Passport to create a new topic on forum"
+      category_level_settings:
+        heading: "Sybil Protection"
+        minimum_score_to_post: "Minimum score to post"
+        minimum_score_to_post_description: "Users must have this score on Gitcoin Passport to post on this category"
+        minimum_score_to_create_topic: "Minimum score to create a new topic"
+        minimum_score_to_create_topic_description: "Users must have this score on Gitcoin Passport to create a new topic on this category"
+        sybil_protection_info: "Sybil protection scores have a higher priority than groups, that is, if a person is part of the group but does not satisfy a score requirement they would not be able to perform the action."
+      banner:
+        inactive_gating_not_connected_wallet: "This forum will be gated by Gitcoin Passport soon. Please link your ethereum address before then to continue posting."
+        active_gating_not_connected_wallet: "This forum is gated by Gitcoin Passport. Please link your ethereum address to continue posting."
+        active_gating_low_score: "This forum is gated by Gitcoin Passport. Unfortunately, you dont meet the requirements to post. Please increase your Gitcoin Passport score to continue posting."
+        inactive_gating_low_score: "This forum will be gated by Gitcoin Passport soon. Unfortunately, you wouldn't meet the requirements to post after this. Please increase your Gitcoin Passport score before then to continue posting."
+        link_to_passport: "Increase Passport Score"
+        link_to_connect_wallet: "Link your Wallet"
+        user_passport_score: "Your current score is %{score}"
+        minimum_score_required: "Minimum score required is %{minimum_score_required}"
+        score_required_to_post: "Score required to post %{score_required} to post"
+        score_required_to_create_topic: "Score required to create a topic %{score_required}"
+        passport_gating_starts_on: "Gating starts on %{date}"

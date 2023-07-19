@@ -1,0 +1,19 @@
+en:
+  site_settings:
+    gitcoin_passport_enabled: "Enable Gitcoin Passport?"
+    gitcoin_passport_api_key: "Gitcoin Passport API Key"
+    gitcoin_passport_scorer_id: "Passport Scorer ID"
+    gitcoin_passport_forum_level_score_to_create_account: "Forum Level Score to Create Account"
+    gitcoin_passport_forum_level_score_to_post: "Forum Level Score to Post"
+    gitcoin_passport_forum_level_score_to_create_new_topic: "Forum Level Score to Create New Topic"
+    gitcoin_passport_last_date_to_connect_wallet_for_existing_users: "Last Date to Connect Wallet and Share Passport Scores for Existing Users. Please enter the date in YYYY-MM-DD format."
+    gitcoin_passport_required_to_get_unique_humanity_bronze_badge: "Required Gitcoin Passport Score to get Unique Humanity Bronze Badge"
+    gitcoin_passport_required_to_get_unique_humanity_silver_badge: "Required Gitcoin Passport Score to get Unique Humanity Silver Badge"
+    gitcoin_passport_required_to_get_unique_humanity_gold_badge: "Required Gitcoin Passport Score to get Unique Humanity Gold Badge"
+    errors:
+      date_invalid: "Please enter a valid date in YYYY-MM-DD format."
+  gitcoin_passport:
+    doesnt_meet_requirement: "You dont have the required Gitcoin Passport score to perform this action. Your current Gitcoin Passport score is %{score}. The required score is %{required_score}. Please visit https://passport.gitcoin.co/ and collect stamps, then come back and try again."
+    has_not_connected_wallet: "Please connect your wallet to login to the forum."
+    create_account_wallet_not_connected: "You must connect your wallet to create an account"
+    create_account_minimum_score_not_satisfied: "You dont have the required Gitcoin Passport score to create an account. Your current Gitcoin Passport score is %{score}. The required score is %{required_score}. Please visit https://passport.gitcoin.co/ and collect stamps, then come back and try again."

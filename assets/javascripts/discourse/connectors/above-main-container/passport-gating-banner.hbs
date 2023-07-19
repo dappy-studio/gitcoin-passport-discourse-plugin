@@ -1,0 +1,70 @@
+{{#if this.showPassportGatingMessage}}
+  <div class="row">
+    <div class="passport-banner alert alert-info">
+      <div class="column">
+        <span>
+          <div class="banner-message">{{this.bannerMessage}}</div>
+          <DButton
+            @display="link"
+            @action={{action this.redirectLink}}
+            @label={{this.redirectLinkText}}
+          />
+        </span>
+        <div class="passport-score-container">
+          {{#if this.showScoreRequiredToCreateAccount}}
+            <div
+              class="passport-score-section score-required-to-create-account"
+            >
+              <p>{{i18n
+                  "gitcoin_passport.banner.minimum_score_required"
+                  minimum_score_required=this.scoreRequiredToCreateAccount
+                }}</p>
+            </div>
+          {{/if}}
+          {{#if this.showScoreRequiredToPost}}
+            <div class="passport-score-section score-required-to-post">
+              <p>{{i18n
+                  "gitcoin_passport.banner.score_required_to_post"
+                  date=this.scoreRequiredToPost
+                }}</p>
+            </div>
+          {{/if}}
+          {{#if this.showScoreRequiredToCreateTopic}}
+            <div class="passport-score-section score-required-to-create-topic">
+              <p>{{i18n
+                  "gitcoin_passport.banner.score_required_to_create_topic"
+                  date=this.scoreRequiredToCreateTopic
+                }}</p>
+            </div>
+          {{/if}}
+          {{#if this.showUserScore}}
+            <div class="passport-score-section user-score">
+              <p class="passport-score-text">{{i18n
+                  "gitcoin_passport.banner.user_passport_score"
+                  score=this.userScore
+                }}</p>
+            </div>
+          {{/if}}
+        </div>
+
+        {{#if this.showActivationDateInBanner}}
+          <div class="passport-score-section last-date">
+            <p>{{i18n
+                "gitcoin_passport.banner.passport_gating_starts_on"
+                date=siteSettings.gitcoin_passport_last_date_to_connect_wallet_for_existing_users
+              }}</p>
+          </div>
+        {{/if}}
+
+      </div>
+      {{#if this.canDismiss}}
+        <DButton
+          @icon="times"
+          @action={{action "dismiss"}}
+          @class="btn btn-flat close"
+          @title="banner.close"
+        />
+      {{/if}}
+    </div>
+  </div>
+{{/if}}

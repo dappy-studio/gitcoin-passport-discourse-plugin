@@ -1,0 +1,47 @@
+plugins:
+  gitcoin_passport_enabled:
+    default: true
+    client: true
+  gitcoin_passport_api_key:
+    client: true
+    default: 'api-key'
+  gitcoin_passport_scorer_id:
+    client: true
+    default: 0
+    min: 0
+  gitcoin_passport_forum_level_score_to_create_account:
+    client: true
+    default: 12
+    min: 0
+    max: 100
+  gitcoin_passport_forum_level_score_to_post:
+    client: true
+    default: 17
+    min: 0
+    max: 100
+  gitcoin_passport_forum_level_score_to_create_new_topic:
+    client: true
+    default: 20
+    min: 0
+    max: 100
+  gitcoin_passport_last_date_to_connect_wallet_for_existing_users:
+    client: true
+    default: "2023-09-10"
+    validator: "DateValidator"
+  gitcoin_passport_required_to_get_unique_humanity_bronze_badge:
+    client: true
+    default: 10
+    min: 0
+    max: 100
+  gitcoin_passport_required_to_get_unique_humanity_silver_badge:
+    client: true
+    default: 20
+    min: 0
+    max: 100
+  gitcoin_passport_required_to_get_unique_humanity_gold_badge:
+    client: true
+    default: 30
+    min: 0
+    max: 100
+
+

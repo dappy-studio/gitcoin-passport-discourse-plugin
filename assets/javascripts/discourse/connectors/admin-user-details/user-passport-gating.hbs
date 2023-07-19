@@ -1,0 +1,24 @@
+{{#if this.siteSettings.gitcoin_passport_enabled}}
+
+  <section class="details">
+    <h1>{{i18n "gitcoin_passport.user_level_settings.heading"}}</h1>
+
+    <div class="display-row min-score-to-post">
+      <AdminEditableField
+        @name="gitcoin_passport.user_level_settings.minimum_score_to_post"
+        @value={{this.args.outletArgs.model.min_score_to_post}}
+        @action={{action "saveMinimumScoreToCreatePost"}}
+        @editing={{this.args.outletArgs.model.editingMinimumScoreToCreatePost}}
+      />
+    </div>
+    <div class="display-row min-score-to-create-topic">
+      <AdminEditableField
+        @name="gitcoin_passport.user_level_settings.minimum_score_to_create_topic"
+        @value={{this.args.outletArgs.model.min_score_to_create_topic}}
+        @action={{action "saveMinimumScoreToCreateTopic"}}
+        @editing={{this.args.outletArgs.model.editingMinimumScoreToCreateTopic}}
+      />
+    </div>
+
+  </section>
+{{/if}}
