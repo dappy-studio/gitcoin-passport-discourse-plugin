@@ -19,7 +19,7 @@ RSpec.describe UserPassportScore do
         user: user
       )
       expect(invalid_passport_score).not_to be_valid
-      expect(invalid_passport_score.errors[:required_score]).to include("must be less than or equal to 100")
+      expect(invalid_passport_score.errors[:required_score]).to include("must be between 0 and 100")
 
       # Create an invalid UserPassportScore instance
       invalid_passport_score2 = UserPassportScore.new(
@@ -27,7 +27,7 @@ RSpec.describe UserPassportScore do
         user: user
       )
       expect(invalid_passport_score2).not_to be_valid
-      expect(invalid_passport_score2.errors[:required_score]).to include("must be greater than or equal to 0")
+      expect(invalid_passport_score2.errors[:required_score]).to include("must be between 0 and 100")
     end
 
     it 'validates uniqueness of user_id and user_action_type' do

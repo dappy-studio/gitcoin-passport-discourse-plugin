@@ -36,9 +36,16 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
       get :score, format: :json
       expect(response.status).to eq(403)
     end
+
+    it "raises an error if the plugin isnt enabled" do
+      SiteSetting.gitcoin_passport_enabled = false
+      session['authentication'] = { 'extra_data' => { 'uid' => ethaddress } }
+      get :score, format: :json
+      expect(response.status).to eq(404)
+    end
   end
 
-  describe 'POST saveUserScore' do
+  describe 'PUT user_level_gating_score' do
     context "when Gitcoin Passport is enabled and scorer ID is set" do
       let(:user) { Fabricate(:user, admin: true) }
 
@@ -52,7 +59,7 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
         score = 10.0
         action_id = 1
 
-        post :saveUserScore, format: :json, params: { user_id: user_id, score: score, action_id: action_id }
+        post :user_level_gating_score, format: :json, params: { user_id: user_id, score: score, action_id: action_id }
 
         expect(response.status).to eq(200)
         expect(UserPassportScore.where(user_id: user_id, user_action_type: action_id).exists?).to be_truthy
@@ -75,7 +82,7 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
         score = 20.0
         action_id = 1
 
-        post :saveUserScore, format: :json, params: { user_id: user_id, score: score, action_id: action_id }
+        post :user_level_gating_score, format: :json, params: { user_id: user_id, score: score, action_id: action_id }
 
         expect(response.status).to eq(200)
         expect(UserPassportScore.find(user_passport_score.id).required_score).to eq(score)
@@ -100,7 +107,7 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
         user_id = user.id
         score = 10.0
         action_id = 1
-        post :saveUserScore, format: :json,  params: { user_id: user_id, score: score, action_id: action_id }
+        post :user_level_gating_score, format: :json,  params: { user_id: user_id, score: score, action_id: action_id }
 
         expect(JSON.parse(response.body)).to eq({ 'status' => 403, 'error' => 'You must be logged in to access this resource' })
       end
@@ -115,14 +122,44 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
       end
 
       it 'returns an error if the user is not an admin' do
-        post :saveUserScore, format: :json, params: { user_id: user.id, score: 10.0, action_id: 1 }
+        post :user_level_gating_score, format: :json, params: { user_id: user.id, score: 10.0, action_id: 1 }
 
         expect(JSON.parse(response.body)).to eq({ 'status' => 403, 'error' => 'You must be an admin to access this resource' })
       end
     end
+
+    context 'required score is outside of the valid range' do
+      let(:user) { Fabricate(:user, admin: true) }
+
+      before do
+        SiteSetting.gitcoin_passport_enabled = true
+        provider = log_in_user(user)
+      end
+
+      it 'returns an error if the user is not an admin' do
+        post :user_level_gating_score, format: :json, params: { user_id: user.id, score: 101.0, action_id: 1 }
+
+        expect(JSON.parse(response.body)).to eq({ 'errors' => ['Required score must be between 0 and 100'] })
+      end
+    end
+
+
+    context 'plugin is not enabled' do
+      let(:user) { Fabricate(:user, admin: true) }
+
+      before do
+        SiteSetting.gitcoin_passport_enabled = false
+        provider = log_in_user(user)
+      end
+
+      it 'raises an error' do
+        post :user_level_gating_score, format: :json, params: { user_id: user.id, score: 101.0, action_id: 1 }
+        expect(response.status).to eq(404)
+      end
+    end
   end
 
-  describe 'POST saveCategoryScore' do
+  describe 'PUT category_level_gating_score' do
     context "when Gitcoin Passport is enabled and scorer ID is set" do
       let(:user) { Fabricate(:user, admin: true) }
       let(:category) { Fabricate(:category) }
@@ -137,7 +174,7 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
         score = 10.0
         action_id = 1
 
-        post :saveCategoryScore, format: :json, params: { category_id: category_id, score: score, action_id: action_id }
+        post :category_level_gating_score, format: :json, params: { category_id: category_id, score: score, action_id: action_id }
 
         expect(response.status).to eq(200)
         expect(CategoryPassportScore.where(category_id: category_id, user_action_type: action_id).exists?).to be_truthy
@@ -160,7 +197,7 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
         score = 20.0
         action_id = 1
 
-        post :saveCategoryScore, format: :json, params: { category_id: category_id, score: score, action_id: action_id }
+        post :category_level_gating_score, format: :json, params: { category_id: category_id, score: score, action_id: action_id }
 
         expect(response.status).to eq(200)
         expect(CategoryPassportScore.find(category_passport_score.id).required_score).to eq(score)
@@ -186,7 +223,7 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
         category_id = category.id
         score = 10.0
         action_id = 1
-        post :saveCategoryScore, format: :json,  params: { category_id: category_id, score: score, action_id: action_id }
+        post :category_level_gating_score, format: :json,  params: { category_id: category_id, score: score, action_id: action_id }
 
         expect(JSON.parse(response.body)).to eq({ 'status' => 403, 'error' => 'You must be logged in to access this resource' })
       end
@@ -202,9 +239,87 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
       end
 
       it 'returns an error if the user is not an admin' do
-        post :saveCategoryScore, format: :json, params: { category_id: category.id, score: 10.0, action_id: 1 }
+        post :category_level_gating_score, format: :json, params: { category_id: category.id, score: 10.0, action_id: 1 }
 
         expect(JSON.parse(response.body)).to eq({ 'status' => 403, 'error' => 'You must be an admin to access this resource' })
+      end
+    end
+
+    context 'required score is outside of the valid range' do
+      let(:user) { Fabricate(:user, admin: true) }
+      let(:category) { Fabricate(:category) }
+
+      before do
+        SiteSetting.gitcoin_passport_enabled = true
+        provider = log_in_user(user)
+      end
+
+      it 'returns an error if the user is not an admin' do
+        post :category_level_gating_score, format: :json, params: { category_id: category.id, score: 101.0, action_id: 1 }
+
+        expect(JSON.parse(response.body)).to eq({ 'errors' => ['Required score must be between 0 and 100'] })
+      end
+    end
+
+    context 'plugin is not enabled' do
+      let(:user) { Fabricate(:user, admin: true) }
+      let(:category) { Fabricate(:category) }
+
+      before do
+        SiteSetting.gitcoin_passport_enabled = false
+        provider = log_in_user(user)
+      end
+
+      it 'raises an error' do
+        post :category_level_gating_score, format: :json, params: { category_id: category.id, score: 101.0, action_id: 1 }
+        expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe 'PUT refresh_score' do
+    context "plugin is enabled" do
+      let(:ethaddress) { '0x123456789abcdef' }
+      let(:user) { Fabricate(:user, admin: true) }
+      let(:associated_accounts) { [Fabricate(:user_associated_account_siwe, user_id: user.id, provider_uid: ethaddress, info: {
+        'name' => ethaddress,
+      })] }
+
+      before do
+        SiteSetting.gitcoin_passport_enabled = true
+        SiteSetting.gitcoin_passport_scorer_id = 0
+        provider = log_in_user(user)
+        UserAssociatedAccount.stubs(:find_by).returns(associated_accounts.first)
+      end
+
+      it "refreshes the score" do
+        stub_fetch_score_request({
+          address: ethaddress,
+          scorer_id: SiteSetting.gitcoin_passport_scorer_id
+        }.to_json, {
+          score: 42
+        }.to_json)
+
+        post :refresh_score, format: :json
+
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)).to eq({ 'score' => 42 })
+      end
+    end
+
+    context 'plugin is not enabled' do
+      let(:user) { Fabricate(:user, admin: true) }
+      let(:category) { Fabricate(:category) }
+
+      before do
+        SiteSetting.gitcoin_passport_enabled = false
+        provider = log_in_user(user)
+      end
+
+      it 'raises an error' do
+        post :refresh_score, format: :json
+
+        expect(response.status).to eq(404)
       end
     end
   end

@@ -69,6 +69,10 @@ RSpec.describe DiscourseGitcoinPassport::Passport do
       let(:action_type) { UserAction.types[:reply] }
       let(:category) { Fabricate(:category) }
       let(:user) { Fabricate(:user) }
+      let(:ethaddress) { '0x1234567890' }
+      let(:associated_accounts) { [Fabricate(:user_associated_account_siwe, user_id: user.id, provider_uid: ethaddress, info: {
+        'name' => ethaddress,
+      })] }
 
       it 'returns false when there is a minimum score required and no ethaddress' do
         DiscourseGitcoinPassport::Passport.stubs(:minimum_required_score).returns(24)
@@ -81,9 +85,7 @@ RSpec.describe DiscourseGitcoinPassport::Passport do
       it 'returns true when there is an ethaddress and the passport score is higher than the required score' do
         DiscourseGitcoinPassport::Passport.stubs(:minimum_required_score).returns(24)
         DiscourseGitcoinPassport::Passport.stubs(:fetch_score).returns(41)
-        UserAssociatedAccount.create!(user_id: user.id, provider_name: "siwe", provider_uid: "0x1234567890", info: {
-          name: "0x1234567890"
-        })
+        UserAssociatedAccount.stubs(:find_by).returns(associated_accounts.first)
 
         has_minimimum_required_score = DiscourseGitcoinPassport::Passport.has_minimimum_required_score?(user, category, action_type)
 
@@ -93,10 +95,8 @@ RSpec.describe DiscourseGitcoinPassport::Passport do
       it 'returns false when there is an ethaddress and the passport score is not higher than the required score' do
         DiscourseGitcoinPassport::Passport.stubs(:minimum_required_score).returns(24)
         DiscourseGitcoinPassport::Passport.stubs(:fetch_score).returns(13)
+        UserAssociatedAccount.stubs(:find_by).returns(associated_accounts.first)
 
-        UserAssociatedAccount.create!(user_id: user.id, provider_name: "siwe", provider_uid: "0x1234567890", info: {
-          name: "0x1234567890"
-        })
         has_minimimum_required_score = DiscourseGitcoinPassport::Passport.has_minimimum_required_score?(user, category, action_type)
 
         expect(has_minimimum_required_score).to eq(false)
@@ -166,7 +166,9 @@ RSpec.describe DiscourseGitcoinPassport::Passport do
     let(:scorer_id) { 0 }
     let(:user) { Fabricate(:user) }
     let(:user_with_associated_siwe_account) { Fabricate(:user) }
-
+    let(:user_associated_account_siwe) { Fabricate(:user_associated_account_siwe, user_id: user_with_associated_siwe_account.id, provider_uid: user_address, info: {
+      'name' => user_address,
+    }) }
     before do
       DiscourseGitcoinPassport::Passport.stubs(:score).returns(92)
     end
@@ -176,17 +178,8 @@ RSpec.describe DiscourseGitcoinPassport::Passport do
     end
 
     it 'updates the passport score for the user if wallet is connected' do
-      acc = UserAssociatedAccount.where(user_id: user_with_associated_siwe_account.id, provider_name: "siwe").first
-      if acc
-        acc.info = {name: user_address}
-        acc.save!
-      else
-        UserAssociatedAccount.create!(user_id: user_with_associated_siwe_account.id, provider_name: "siwe", provider_uid: user_address, info: {
-          name: user_address
-        })
-      end
+      UserAssociatedAccount.stubs(:find_by).returns(user_associated_account_siwe)
       score = DiscourseGitcoinPassport::Passport.refresh_passport_score(user_with_associated_siwe_account)
-
       expect(score).to eq(92)
       expect(User.find(user_with_associated_siwe_account.id).passport_score).to eq(92)
       expect(User.find(user_with_associated_siwe_account.id).passport_score_last_update).to be_present
