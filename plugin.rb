@@ -41,9 +41,9 @@ after_initialize do
 
   DiscourseGitcoinPassport::Engine.routes.draw do
     get "/score" => "passport#score"
-    put "/saveUserScore" => "passport#saveUserScore"
-    put "/saveCategoryScore" => "passport#saveCategoryScore"
-    put "/refreshPassportScore" => "passport#refreshPassportScore"
+    put "/saveUserScore" => "passport#user_level_gating_score"
+    put "/saveCategoryScore" => "passport#category_level_gating_score"
+    put "/refreshPassportScore" => "passport#refresh_score"
   end
 
 
@@ -57,15 +57,19 @@ after_initialize do
     UsersController.class_eval do
       alias_method :existing_create, :create
       def create
-        if SiteSetting.gitcoin_passport_enabled && SiteSetting.gitcoin_passport_scorer_id
+        if SiteSetting.gitcoin_passport_enabled &&
+          SiteSetting.gitcoin_passport_scorer_id &&
+          SiteSetting.gitcoin_passport_forum_level_score_to_create_account &&
+          SiteSetting.gitcoin_passport_forum_level_score_to_create_account.to_f > 0
+
           sesh_hash = session.to_hash
           ethaddress = sesh_hash['authentication']['extra_data']['uid'] if sesh_hash['authentication'] && sesh_hash['authentication']['extra_data']
+
           if (!ethaddress)
             return fail_with("gitcoin_passport.create_account_wallet_not_connected")
           end
-
           score = DiscourseGitcoinPassport::Passport.score(ethaddress, SiteSetting.gitcoin_passport_scorer_id)
-          required_score_to_create_account = SiteSetting.gitcoin_passport_forum_level_score_to_create_account.to_f || 0
+          required_score_to_create_account = SiteSetting.gitcoin_passport_forum_level_score_to_create_account.to_f
 
           if score.to_i < required_score_to_create_account
             message = I18n.t("gitcoin_passport.create_account_minimum_score_not_satisfied", score: score, required_score: required_score_to_create_account)

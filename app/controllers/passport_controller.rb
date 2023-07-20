@@ -20,7 +20,7 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
             }
   end
 
-  def saveUserScore
+  def user_level_gating_score
     begin
       params.require(:user_id)
       params.require(:score)
@@ -43,7 +43,9 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
       end
       user_passport_score.required_score = params[:score]
       if user_passport_score.save
-        return user_passport_score
+        render json: {
+          user_passport_score: user_passport_score
+        }
       else
         raise DiscourseGitcoinPassport::Error.new(user_passport_score.errors.full_messages.join(", "))
       end
@@ -52,7 +54,7 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
     end
   end
 
-  def saveCategoryScore
+  def category_level_gating_score
     begin
       params.require(:category_id)
       params.require(:score)
@@ -74,13 +76,15 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
       if category_passport_scores.exists?
         category_passport_score = category_passport_scores.first
       else
-        category_passport_score = UserPassportScore.new
+        category_passport_score = CategoryPassportScore.new
         category_passport_score.category_id = params[:category_id]
         category_passport_score.user_action_type = params[:action_id]
       end
       category_passport_score.required_score = params[:score]
       if category_passport_score.save
-        return category_passport_score
+        render json: {
+          category_passport_score: category_passport_score
+        }
       else
         raise DiscourseGitcoinPassport::Error.new(category_passport_score.errors.full_messages.join(", "))
       end
@@ -90,7 +94,7 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
   end
 
 
-  def refreshPassportScore
+  def refresh_score
     score = DiscourseGitcoinPassport::Passport.refresh_passport_score(current_user)
     render json: {
       score: score
@@ -99,7 +103,7 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
 
   def ensure_gitcoin_passport_enabled
     if !SiteSetting.gitcoin_passport_enabled
-      raise Discourse::InvalidAccess.new("Gitcoin Passport is not enabled")
+      raise Discourse::NotFound.new("Gitcoin Passport is not enabled")
     end
   end
 end
