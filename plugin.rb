@@ -63,9 +63,11 @@ after_initialize do
           SiteSetting.gitcoin_passport_forum_level_score_to_create_account.to_f > 0
 
           sesh_hash = session.to_hash
+          Rails.logger.info("Session hash of new session created: #{sesh_hash.inspect}")
           ethaddress = sesh_hash['authentication']['extra_data']['uid'] if sesh_hash['authentication'] && sesh_hash['authentication']['extra_data']
 
           if (!ethaddress)
+            Rails.logger.info("User #{params[:username]} does not have an ethereum address associated with their account")
             return fail_with("gitcoin_passport.create_account_wallet_not_connected")
           end
           score = DiscourseGitcoinPassport::Passport.score(ethaddress, SiteSetting.gitcoin_passport_scorer_id)
@@ -88,10 +90,9 @@ after_initialize do
         # for performance reasons so that we don't have to query the passport api every time we need to check the score
         if association and association.user_id
             user = User.where(id: association.user_id).first
-            score = DiscourseGitcoinPassport::Passport.refresh_passport_score(user)
-            if !score
-              score = 0
-            end
+            score = DiscourseGitcoinPassport::Passport.refresh_passport_score(user) || 0
+
+            Rails.logger.info("User #{user.username} has a passport score of #{score}. Saving it ...")
             user.update(passport_score: score, passport_score_last_update: Time.now)
         end
 
@@ -107,10 +108,10 @@ after_initialize do
           }]
           user_ostruct = OpenStruct.new(user_hash)
 
-          score = DiscourseGitcoinPassport::Passport.refresh_passport_score(user_ostruct)
-          if !score
-            score = 0
-          end
+          Rails.logger.info("Found user #{user_ostruct.username} with id #{user_ostruct.id} and ethereum address #{auth[:extra_data][:uid]}. Refreshing passport score ...")
+          score = DiscourseGitcoinPassport::Passport.refresh_passport_score(user_ostruct) || 0
+
+          Rails.logger.info("User #{user_ostruct.username} has a passport score of #{score}. Saving it ...")
           user.update(passport_score: score, passport_score_last_update: Time.now)
         end
         super
@@ -126,6 +127,7 @@ after_initialize do
         if DiscourseGitcoinPassport::AccessWithoutPassport.expired?
           category = Category.where(id: topic.category_id).first
           if !DiscourseGitcoinPassport::Passport.has_minimimum_required_score?(@user, category, UserAction.types[:reply])
+            Rails.logger.info("User #{@user[:username]} does not have the minimum required score to post on topic #{topic[:id]} in category #{category[:id]}")
             return false
           end
         end
@@ -136,6 +138,7 @@ after_initialize do
 
         if DiscourseGitcoinPassport::AccessWithoutPassport.expired?
           if !DiscourseGitcoinPassport::Passport.has_minimimum_required_score?(@user, category, UserAction.types[:new_topic])
+            Rails.logger.info("User #{@user[:username]} does not have the minimum required score to create a topic on category #{category[:id]}")
             return false
           end
         end
