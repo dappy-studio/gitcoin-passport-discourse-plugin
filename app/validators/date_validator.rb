@@ -13,7 +13,7 @@ class ::DateValidator
   end
 
   def valid_value?(value)
-    !!(value == "" || DateValidator.valid_date_string?(value))
+    !!(DateValidator.valid_date_string?(value))
   end
 
   def error_message

@@ -11,7 +11,7 @@ class ::EthAddressValidator
   end
 
   def error_message
-    I18n.t("site_settings.errors.chat_default_channel")
+    I18n.t("site_settings.errors.ethaddress_invalid")
   end
 end
 
