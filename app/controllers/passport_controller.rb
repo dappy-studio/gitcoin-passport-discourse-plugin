@@ -5,26 +5,6 @@ class DiscourseGitcoinPassport::PassportController < ::ApplicationController
 
   before_action :ensure_gitcoin_passport_enabled
 
-  def score
-    begin
-      sesh_hash = session.to_hash
-      raise Discourse::InvalidAccess.new("You must connect your wallet to view your score") if not
-                                                                                              sesh_hash or not
-                                                                                              sesh_hash['authentication'] or not
-                                                                                              sesh_hash['authentication']['extra_data'] or not
-                                                                                              sesh_hash['authentication']['extra_data']['uid']
-      ethaddress = sesh_hash['authentication']['extra_data']['uid']
-
-
-      render json: {
-                score: DiscourseGitcoinPassport::Passport.score(ethaddress, SiteSetting.gitcoin_passport_scorer_id)
-              }
-    rescue DiscourseGitcoinPassport::Error => e
-      Rails.logger.error("Error fetching passport score: #{e.message}")
-      render_json_error e.message
-    end
-  end
-
   def user_level_gating_score
     begin
       params.require(:user_id)

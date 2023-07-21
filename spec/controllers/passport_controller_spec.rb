@@ -10,41 +10,6 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
     SiteSetting.gitcoin_passport_scorer_id = 0
   end
 
-  describe 'GET #score' do
-    let(:ethaddress) { '0x123456789abcdef' }
-
-    before do
-      stub_fetch_score_request({
-        address: ethaddress,
-        scorer_id: SiteSetting.gitcoin_passport_scorer_id
-      }.to_json, {
-        score: 42
-      }.to_json)
-
-    end
-
-    it 'returns the user score' do
-      session['authentication'] = { 'extra_data' => { 'uid' => ethaddress } }
-
-      get :score, format: :json
-      expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)).to eq({ 'score' => 42 })
-    end
-
-    it 'raises an error if the wallet is not connected' do
-      session['authentication'] = nil
-      get :score, format: :json
-      expect(response.status).to eq(403)
-    end
-
-    it "raises an error if the plugin isnt enabled" do
-      SiteSetting.gitcoin_passport_enabled = false
-      session['authentication'] = { 'extra_data' => { 'uid' => ethaddress } }
-      get :score, format: :json
-      expect(response.status).to eq(404)
-    end
-  end
-
   describe 'PUT user_level_gating_score' do
     context "when Gitcoin Passport is enabled and scorer ID is set" do
       let(:user) { Fabricate(:user, admin: true) }
