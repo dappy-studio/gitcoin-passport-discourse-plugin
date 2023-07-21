@@ -43,5 +43,8 @@ plugins:
     default: 30
     min: 0
     max: 100
-
+  ethereum_node_url:
+    client: true
+    default: "https://cloudflare-eth.com/"
+    validator: "EthereumNodeUrlValidator"
 

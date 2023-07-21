@@ -16,7 +16,7 @@ register_asset "stylesheets/passport-score-value.scss"
 
 require_relative "app/validators/ethaddress_validator.rb"
 require_relative "app/validators/date_validator.rb"
-
+require_relative "app/validators/ethereum_node_validator.rb"
 
 after_initialize do
   module ::DiscourseGitcoinPassport
@@ -35,12 +35,13 @@ after_initialize do
   require_relative "app/controllers/passport_controller.rb"
   require_relative "lib/gitcoin_passport_module/passport.rb"
   require_relative "lib/gitcoin_passport_module/access_without_passport.rb"
+  require_relative "lib/ens/resolver.rb"
+  require_relative "lib/ens/coin_type.rb"
   require_relative "app/models/user_passport_score.rb"
   require_relative "app/models/category_passport_score.rb"
 
 
   DiscourseGitcoinPassport::Engine.routes.draw do
-    get "/score" => "passport#score"
     put "/saveUserScore" => "passport#user_level_gating_score"
     put "/saveCategoryScore" => "passport#category_level_gating_score"
     put "/refreshPassportScore" => "passport#refresh_score"
@@ -57,15 +58,14 @@ after_initialize do
     UsersController.class_eval do
       alias_method :existing_create, :create
       def create
+        puts "create called"
         if SiteSetting.gitcoin_passport_enabled &&
           SiteSetting.gitcoin_passport_scorer_id &&
           SiteSetting.gitcoin_passport_forum_level_score_to_create_account &&
           SiteSetting.gitcoin_passport_forum_level_score_to_create_account.to_f > 0
-
           sesh_hash = session.to_hash
           Rails.logger.info("Session hash of new session created: #{sesh_hash.inspect}")
           ethaddress = sesh_hash['authentication']['extra_data']['uid'] if sesh_hash['authentication'] && sesh_hash['authentication']['extra_data']
-
           if (!ethaddress)
             Rails.logger.info("User #{params[:username]} does not have an ethereum address associated with their account")
             return fail_with("gitcoin_passport.create_account_wallet_not_connected")

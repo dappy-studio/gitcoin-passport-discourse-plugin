@@ -2,19 +2,31 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'eth'
 
 class DiscourseGitcoinPassport::Passport
 
   def self.score(user_address, scorer_id)
     url = URI("https://api.scorer.gitcoin.co/registry/submit-passport")
 
+    ethaddress = user_address
+    address_validator = EthAddressValidator.new
+    if address_validator.valid_value?(ethaddress) == false and ethaddress.ends_with?(".eth")
+      client = Eth::Client.create(SiteSetting.ethereum_node_url)
+      resolver = Eth::Ens::Resolver.new(client)
+      ethaddress = resolver.resolve(ethaddress)
+    end
+    if address_validator.valid_value?(ethaddress) == false
+      Rails.logger.error("Invalid Ethereum address")
+      raise Discourse::InvalidAddress.new("Invalid Ethereum address")
+    end
     https = Net::HTTP.new(url.host, url.port)
     https.use_ssl = true
     request = Net::HTTP::Post.new(url)
     request["x-api-key"] = SiteSetting.gitcoin_passport_api_key
     request["Content-Type"] = "application/json"
     request.body = JSON.dump({
-      "address": user_address,
+      "address": ethaddress,
       "scorer_id": scorer_id
     })
 
