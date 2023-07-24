@@ -258,12 +258,7 @@ RSpec.describe DiscourseGitcoinPassport::PassportController do
       end
 
       it "refreshes the score" do
-        stub_fetch_score_request({
-          address: ethaddress,
-          scorer_id: SiteSetting.gitcoin_passport_scorer_id
-        }.to_json, {
-          score: 42
-        }.to_json)
+        DiscourseGitcoinPassport::Passport.stubs(:score).returns(42)
 
         post :refresh_score, format: :json
 

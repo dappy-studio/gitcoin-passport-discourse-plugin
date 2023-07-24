@@ -20,7 +20,6 @@ class ::EthereumNodeUrlValidator
 
     response = http.request(request)
     result = JSON.parse(response.body)
-    puts result
     return result['result'] && result['jsonrpc'] == '2.0'
   rescue
     false
@@ -31,7 +30,6 @@ class ::EthereumNodeUrlValidator
   end
 
   def valid_value?(value)
-    puts "valid_value? #{value}"
     !!(EthereumNodeUrlValidator.valid_url?(value) && EthereumNodeUrlValidator.valid_ethereum_node?(value))
   end
 

@@ -28,3 +28,14 @@ def stub_fetch_score_request(request_body, response_body)
       }).
     to_return(status: 200, body: response_body, headers: {})
 end
+
+
+RSpec.configure do |config|
+  config.before(:suite) do
+    ::EthereumNodeUrlValidator.class_eval do
+      def self.valid_ethereum_node?(url)
+        true
+      end
+    end
+  end
+end
