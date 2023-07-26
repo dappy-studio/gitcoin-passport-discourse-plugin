@@ -179,7 +179,8 @@ No worries, we have also recorded a [Youtube tutorial](https://youtu.be/L03sp7uk
 
 If you still need help, please feel free to ask for support in any of the following mediums.
 
-1. Our newly created Gitcoin Passport gated [Discourse](https://discourse.spect.network/c/support/5)
-2. Our [Discord](https://discord.gg/nP9awFqm3A), where you may get the fastest response as of today
-3. Our email at support@spect.network (this will be the slowest, but just in case you're having trouble with the above)
+1. Raise an issue on this repo
+2. Our newly created Gitcoin Passport gated [Discourse](https://discourse.spect.network/c/support/5)
+3. Our [Discord](https://discord.gg/nP9awFqm3A), where you may get the fastest response as of today
+4. Our email at support@spect.network (this will be the slowest, but just in case you're having trouble with the above)
 
