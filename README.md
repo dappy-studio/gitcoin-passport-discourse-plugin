@@ -6,9 +6,9 @@ Gitcoin Passport is a sybil resistance tool that helps DAOs and online communiti
 
 ## How Gitcoin Passport Works
 
-Gitcoin Passport allows anyone to create their own passport and stamps to this passport by verifying different criteria. The verification process is completely anonymous, ie, once a stamp is verified, a person can use this stamp on any supported platform (like Discourse) without revealing their identity. For example, a person could prove that they have contributed to codebases on Github on at least 120 distinct days without actually revealing who they are!
+Gitcoin Passport allows anyone to create their own passport and add stamps to this passport by verifying different criteria. The verification process is completely anonymous, ie, once a stamp is verified, a person can use this stamp on any supported platform (like Discourse) without revealing their identity. For example, a person could prove that they have contributed to codebases on Github on at least 120 distinct days without actually revealing who they are!
 
-Examples of some more stamps available today are -
+Examples of some stamps available today are -
 1. More than 1000 number of followers on Twitter
 2. Ownership of a .eth (ENS) name
 3. A Discord account ownership
@@ -16,6 +16,8 @@ Examples of some more stamps available today are -
 5. Certain amount of gas fees spent on the Ethereum network
 
 There are many more stamps available today and being added to Gitcoin Passport regularly. You can find these, create a passport and start adding stamps to your passport on the [Gitcoin Passport](https://passport.gitcoin.co/) website.
+
+![Pasport](https://cdn.discordapp.com/attachments/831959066486112267/1133764606066696265/passport_dashboard.png)
 
 
 ## Requirements
@@ -59,7 +61,7 @@ To enable the plugin, you'd need to have admin access on your Discourse forum. H
 2. Go to the plugins tab
 3. Click the "Settings" button on "discourse-gitcoin-passport" plugin
 
-   Note: If you do now see this plugin, it means the installation of the plugin wasn't successful. Please go back to "Install the Plugin" section.
+   Note: If you do not see this plugin, it means the installation of the plugin wasn't successful. Please go back to "Install the Plugin" section.
 5. Enable Gitcoin Passport by checking the "Enable Gitcoin Passport?" checkbox
 
 ## Setup Gitcoin Passport API key and scorer ID
@@ -73,12 +75,16 @@ To setup the plugin, you'd need to have admin access on your Discourse forum. He
    Select the scoring mechanism you'd want to use => Click "Create Scorer"
 6. Once you have a new scorer, you can copy the Scorer ID and paste it on the field named "gitcoin passport scorer id" in your "discourse-gitcoin-passport" plugin setting on Discourse
 
+![Setup](https://cdn.discordapp.com/attachments/831959066486112267/1133764605789863946/plugin_setting.png)
+
 If you've been able to follow along till here, congrats! You've now successfully setup the basic requirements to have a functional Gitcoin Passport plugin. 
 Now we get to the exciting parts!
 
 ## Customizations
 
 The Gitcoin Passport Discourse plugin is highly customizable which allow you to gate access on various actions taken by an user on your forum.
+
+![customizations](https://cdn.discordapp.com/attachments/831959066486112267/1133764605542420521/customizations.png)
 
 ### gitcoin passport forum level score to create account
 
@@ -91,7 +97,7 @@ Well, you can decide!
 
 ### gitcoin passport last date to connect wallet for existing users
 
-Using this setting, you can set a last date by which existing users would need to connect their wallets and get the minimum score required. After this date, any user (existing or new) that dont have the required minimum score will not have the permission to post or create a new account.
+Using this setting, you can set a last date by which existing users would need to connect their wallets and get the minimum score required. After this date, any user (existing or new) that dont have the required minimum score will not have the permission to post or create a new topic.
 
 ### gitcoin passport forum level score to post (and other ways you can gate posting on Discourse)
 
@@ -104,13 +110,20 @@ Okay, so ...
 When you're trying to gate access to replying on Discourse topics using Gitcoin Passport scores, you can do it on 3 levels.
 
 1. User level - Each user could have a specific score required to reply. If an user doesn't meet this score they cannot reply on any topic. If this score is set, the category level score or the forum level score for this specific user doesn't matter.
+
+![user](https://cdn.discordapp.com/attachments/831959066486112267/1133764604879700079/user_score.png)
+
 2. Category level - Each category could have a specific score required to reply on topics only in that category. If an user doesn't meet the required score, they wont be able to reply only on this category. They would still be able to reply on other categories. If this score is set, the forum level score doesnt matter for this specific category.
-3. Forum level score - This is the minimum score required by all users replying to topics in all categories. Unless there's a score set on the category or user level, this would be the score that is used.
+
+![category](https://cdn.discordapp.com/attachments/831959066486112267/1133764605215252581/category_score.png)
+
+3. Forum level - This is the minimum score required by all users replying to topics in all categories. Unless there's a score set on the category or user level, this would be the score that is used.
 
 ### gitcoin passport forum level score to create new topic (and other ways you can gate posting on Discourse)
 
 This works exactly the same way as the "gitcoin passport forum level score to post" setting. Only difference is this applies to creating a new topic. 
-It is recommended that this score is higher than the score required to post.
+
+IMPORTANT: Please make sure that this score is higher than the score required to post. If it is lower, the score will default to the score required to post (since technically a new topic is also a new post).
 
 
 ## Okay, we have covered the most important parts of this plugin. Now let's go over some of the cool extras!
@@ -150,6 +163,8 @@ The minimum score required by everyone to get the Gold Unique Humanity Badge
 These badges are received by users on the forum automatically when they connect (or reconnect) their wallet. Users can also go to "Profile" => "Summary" and click "Refresh" to update their passport score and automatically receive the badges they're eligible for.
 
 Okay. Now, one final recommended setting applicable to sites that expect high traffic.
+
+![badge](https://cdn.discordapp.com/attachments/831959066486112267/1133764604657422407/badges.png)
 
 ### ethereum node url
 
