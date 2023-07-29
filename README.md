@@ -170,8 +170,6 @@ Okay. Now, one final recommended setting applicable to sites that expect high tr
 
 If you're already running your own ethereum node or have a hosted node (with providers such as Infura or Ankr), you can copy and paste your node url here. Please be aware that the default node set here is a public node on free tier, so it is highly recommended to use your own nodes.
 
-If you'd like to understand why running a node is even required, you can read the "Considerations" readme for more info.
-
 
 ## Woah, that was a lot!
 
@@ -180,7 +178,5 @@ No worries, we have also recorded a [Youtube tutorial](https://youtu.be/L03sp7uk
 If you still need help, please feel free to ask for support in any of the following mediums.
 
 1. Raise an issue on this repo
-2. Our newly created Gitcoin Passport gated [Discourse](https://discourse.spect.network/c/support/5)
-3. Our [Discord](https://discord.gg/nP9awFqm3A), where you may get the fastest response as of today
-4. Our email at support@spect.network (this will be the slowest, but just in case you're having trouble with the above)
-
+2. Our [Discord](https://discord.gg/nP9awFqm3A), where you may get the fastest response as of today
+3. Our email at support@spect.network
