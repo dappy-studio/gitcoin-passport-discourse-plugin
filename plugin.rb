@@ -3,7 +3,7 @@
 # name: discourse-gitcoin-passport
 # about: A discourse plugin to enable users to manage forum access using Gitcoin Passport
 # version: 0.0.1
-# authors: Spect
+# authors: Buidl Studio
 # url: https://passport.gitcoin.co/
 # required_version: 2.7.0
 require 'ostruct'
@@ -58,19 +58,21 @@ after_initialize do
     UsersController.class_eval do
       alias_method :existing_create, :create
       def create
-        puts "create called"
         if SiteSetting.gitcoin_passport_enabled &&
           SiteSetting.gitcoin_passport_scorer_id &&
           SiteSetting.gitcoin_passport_forum_level_score_to_create_account &&
           SiteSetting.gitcoin_passport_forum_level_score_to_create_account.to_f > 0
           sesh_hash = session.to_hash
           Rails.logger.info("Session hash of new session created: #{sesh_hash.inspect}")
-          ethaddress = sesh_hash['authentication']['extra_data']['uid'] if sesh_hash['authentication'] && sesh_hash['authentication']['extra_data']
-          if (!ethaddress)
+
+          provider = sesh_hash.dig('authentication', 'extra_data', 'provider') # expecting siwe
+          uid = sesh_hash.dig('authentication', 'extra_data', 'uid') # expecting ethereum address
+
+          if (provider != 'siwe' || uid.nil?)
             Rails.logger.info("User #{params[:username]} does not have an ethereum address associated with their account")
             return fail_with("gitcoin_passport.create_account_wallet_not_connected")
           end
-          score = DiscourseGitcoinPassport::Passport.score(ethaddress, SiteSetting.gitcoin_passport_scorer_id)
+          score = DiscourseGitcoinPassport::Passport.score(uid, SiteSetting.gitcoin_passport_scorer_id)
           required_score_to_create_account = SiteSetting.gitcoin_passport_forum_level_score_to_create_account.to_f
 
           if score.to_i < required_score_to_create_account
