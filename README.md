@@ -45,9 +45,9 @@ hooks:
       cmd:
         - sudo -E -u discourse git clone https://github.com/discourse/docker_manager.git
         - sudo -E -u discourse git clone https://github.com/spruceid/discourse-siwe-auth.git
-        - sudo -E -u discourse git clone https://github.com/spect-ai/gitcoin-passport-discourse-plugin.git   # <-- added
+        - sudo -E -u discourse git clone https://github.com/dappy-studio/gitcoin-passport-discourse-plugin.git   # <-- added
 ```
-Follow the existing format of the docker_manager.git line; if it does not contain sudo -E -u discourse then insert - git clone https://github.com/spect-ai/gitcoin-passport-discourse-plugin.git.
+Follow the existing format of the docker_manager.git line; if it does not contain sudo -E -u discourse then insert - git clone https://github.com/dappy-studio/gitcoin-passport-discourse-plugin.git.
 
 Rebuild the container:
 ```
@@ -178,5 +178,5 @@ No worries, we have also recorded a [Youtube tutorial](https://youtu.be/L03sp7uk
 If you still need help, please feel free to ask for support in any of the following mediums.
 
 1. Raise an issue on this repo
-2. Our [Discord](https://discord.gg/nP9awFqm3A), where you may get the fastest response as of today
-3. Our email at support@spect.network
+2. Our [Discord](https://discord.gg/KW5suDzsdp), where you may get the fastest response as of today
+3. Our email at support@dappy.lol
