@@ -173,7 +173,7 @@ If you're already running your own ethereum node or have a hosted node (with pro
 
 ## Woah, that was a lot!
 
-No worries, we have also recorded a [Youtube tutorial](https://youtu.be/iHOMf5-EZXo) to help out (especially if you're a visual learner)
+No worries, we have also recorded a [Youtube tutorial](https://youtu.be/_9RFjcls8vw) to help out (especially if you're a visual learner)
 
 If you still need help, please feel free to ask for support in any of the following mediums.
 
