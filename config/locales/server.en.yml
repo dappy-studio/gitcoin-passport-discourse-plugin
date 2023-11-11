@@ -11,6 +11,7 @@ en:
     gitcoin_passport_required_to_get_unique_humanity_silver_badge: "Required Gitcoin Passport Score to get Unique Humanity Silver Badge"
     gitcoin_passport_required_to_get_unique_humanity_gold_badge: "Required Gitcoin Passport Score to get Unique Humanity Gold Badge"
     ethereum_node_url: "Ethereum Node URL. Default url is a public node on free tier, please add your own node url here if you expect high traffic."
+    migrate_from_existing_forum: "Migrate from existing forum?"
     errors:
       date_invalid: "Please enter a valid date in YYYY-MM-DD format."
       ethaddress_invalid: "Please enter a valid Ethereum address."
