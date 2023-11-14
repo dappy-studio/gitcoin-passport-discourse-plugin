@@ -40,6 +40,7 @@ after_initialize do
   require_relative "lib/ens/coin_type.rb"
   require_relative "app/models/user_passport_score.rb"
   require_relative "app/models/category_passport_score.rb"
+  require_relative "app/jobs/scheduled/gitcoin_passport_update_all.rb"
 
 
   DiscourseGitcoinPassport::Engine.routes.draw do
