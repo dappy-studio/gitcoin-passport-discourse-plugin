@@ -44,3 +44,4 @@ en:
         score_required_to_post: "Score required to post %{score_required} to post"
         score_required_to_create_topic: "Score required to create a topic %{score_required}"
         passport_gating_starts_on: "Gating starts on %{date}"
+      migrate: "Migrate"
