@@ -4,7 +4,7 @@ plugins:
     client: true
   gitcoin_passport_api_key:
     client: true
-    default: 'api-key'
+    default: "api-key"
   gitcoin_passport_scorer_id:
     client: true
     default: 0
@@ -47,4 +47,6 @@ plugins:
     client: true
     default: "https://cloudflare-eth.com/"
     validator: "EthereumNodeUrlValidator"
-
+  migrate_from_existing_forum:
+    default: true
+    client: true
