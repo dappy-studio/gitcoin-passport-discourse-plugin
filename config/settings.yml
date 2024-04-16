@@ -47,6 +47,3 @@ plugins:
     client: true
     default: "https://cloudflare-eth.com/"
     validator: "EthereumNodeUrlValidator"
-  migrate_from_existing_forum:
-    default: true
-    client: true

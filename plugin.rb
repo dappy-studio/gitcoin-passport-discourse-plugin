@@ -33,21 +33,18 @@ after_initialize do
 
 
   require_relative "app/controllers/passport_controller.rb"
-  require_relative "app/controllers/migrate_controller.rb"
   require_relative "lib/gitcoin_passport_module/passport.rb"
   require_relative "lib/gitcoin_passport_module/access_without_passport.rb"
   require_relative "lib/ens/resolver.rb"
   require_relative "lib/ens/coin_type.rb"
   require_relative "app/models/user_passport_score.rb"
   require_relative "app/models/category_passport_score.rb"
-  require_relative "app/jobs/scheduled/gitcoin_passport_update_all.rb"
 
 
   DiscourseGitcoinPassport::Engine.routes.draw do
     put "/saveUserScore" => "passport#user_level_gating_score"
     put "/saveCategoryScore" => "passport#category_level_gating_score"
     put "/refreshPassportScore" => "passport#refresh_score"
-    post "/startMigration" => "passport#start_migration"
   end
 
 
