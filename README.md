@@ -2,13 +2,14 @@
 
 ## Overview
 
-Gitcoin Passport is a sybil resistance tool that helps DAOs and online communities protect themselves from bots and sybil attackers.  This is a guide on how to setup and enable the Gitcoin Passport plugin on Discourse to protect community forums from bad actors while preserving anonymity in the process to do so. 
+Gitcoin Passport is a sybil resistance tool that helps DAOs and online communities protect themselves from bots and sybil attackers. This is a guide on how to setup and enable the Gitcoin Passport plugin on Discourse to protect community forums from bad actors while preserving anonymity in the process to do so.
 
 ## How Gitcoin Passport Works
 
 Gitcoin Passport allows anyone to create their own passport and add stamps to this passport by verifying different criteria. The verification process is completely anonymous, ie, once a stamp is verified, a person can use this stamp on any supported platform (like Discourse) without revealing their identity. For example, a person could prove that they have contributed to codebases on Github on at least 120 distinct days without actually revealing who they are!
 
 Examples of some stamps available today are -
+
 1. More than 1000 number of followers on Twitter
 2. Ownership of a .eth (ENS) name
 3. A Discord account ownership
@@ -18,7 +19,6 @@ Examples of some stamps available today are -
 There are many more stamps available today and being added to Gitcoin Passport regularly. You can find these, create a passport and start adding stamps to your passport on the [Gitcoin Passport](https://passport.gitcoin.co/) website.
 
 ![Pasport](https://cdn.discordapp.com/attachments/831959066486112267/1133764606066696265/passport_dashboard.png)
-
 
 ## Requirements
 
@@ -35,10 +35,10 @@ nano containers/app.yml
 Add the plugin’s repository URL to your container’s app.yml file:
 
 hooks:
-  before_code:                            
-    - exec:                                
-        cmd:                              
-          - gem install rubyzip           
+  before_code:
+    - exec:
+        cmd:
+          - gem install rubyzip
   after_code:
     - exec:
       cd: $home/plugins
@@ -47,26 +47,32 @@ hooks:
         - sudo -E -u discourse git clone https://github.com/spruceid/discourse-siwe-auth.git
         - sudo -E -u discourse git clone https://github.com/dappy-studio/gitcoin-passport-discourse-plugin.git   # <-- added
 ```
+
 Follow the existing format of the docker_manager.git line; if it does not contain sudo -E -u discourse then insert - git clone https://github.com/dappy-studio/gitcoin-passport-discourse-plugin.git.
 
 Rebuild the container:
+
 ```
 cd /var/discourse
 ./launcher rebuild app
 ```
+
 ## Enabling the plugin
 
 To enable the plugin, you'd need to have admin access on your Discourse forum. Here are the steps to enable it.
+
 1. Go to your admin settings page
 2. Go to the plugins tab
 3. Click the "Settings" button on "discourse-gitcoin-passport" plugin
 
    Note: If you do not see this plugin, it means the installation of the plugin wasn't successful. Please go back to "Install the Plugin" section.
-5. Enable Gitcoin Passport by checking the "Enable Gitcoin Passport?" checkbox
+
+4. Enable Gitcoin Passport by checking the "Enable Gitcoin Passport?" checkbox
 
 ## Setup Gitcoin Passport API key and scorer ID
 
 To setup the plugin, you'd need to have admin access on your Discourse forum. Here are the steps to set it up.
+
 1. Go to the [Gitcoin Passport scorer app](https://scorer.gitcoin.co/) and sign in with your wallet
 2. Go to the "API keys" tab => Click "+ API key" => Give your key a name => Click "Create"
 3. Copy the API key and paste on the field named "gitcoin passport api key" in your "discourse-gitcoin-passport" plugin setting on Discourse
@@ -77,7 +83,7 @@ To setup the plugin, you'd need to have admin access on your Discourse forum. He
 
 ![Setup](https://cdn.discordapp.com/attachments/831959066486112267/1133764605789863946/plugin_setting.png)
 
-If you've been able to follow along till here, congrats! You've now successfully setup the basic requirements to have a functional Gitcoin Passport plugin. 
+If you've been able to follow along till here, congrats! You've now successfully setup the basic requirements to have a functional Gitcoin Passport plugin.
 Now we get to the exciting parts!
 
 ## Customizations
@@ -121,14 +127,13 @@ When you're trying to gate access to replying on Discourse topics using Gitcoin 
 
 ### gitcoin passport forum level score to create new topic (and other ways you can gate posting on Discourse)
 
-This works exactly the same way as the "gitcoin passport forum level score to post" setting. Only difference is this applies to creating a new topic. 
+This works exactly the same way as the "gitcoin passport forum level score to post" setting. Only difference is this applies to creating a new topic.
 
 IMPORTANT: Please make sure that this score is higher than the score required to post. If it is lower, the score will default to the score required to post (since technically a new topic is also a new post).
 
-
 ## Okay, we have covered the most important parts of this plugin. Now let's go over some of the cool extras!
 
-The plugin makes it possible to distribute discourse badges automatically when someone crosses a score threshold. This can be used to incentivize individuals to get a higher passport score, thus increasing the overall "humanity" of the community. 
+The plugin makes it possible to distribute discourse badges automatically when someone crosses a score threshold. This can be used to incentivize individuals to get a higher passport score, thus increasing the overall "humanity" of the community.
 
 Why, you ask?
 
@@ -145,8 +150,7 @@ Some quick but important setup before we proceed.
    e. Remember to enable it using the toggle on top.
 3. Do the same thing as 2 to create the Silver and Gold badges.
 
-Now, we are ready to setup the scores required to get these badges. 
-
+Now, we are ready to setup the scores required to get these badges.
 
 ### gitcoin passport required to get unique humanity bronze badge
 
@@ -170,7 +174,6 @@ Okay. Now, one final recommended setting applicable to sites that expect high tr
 
 If you're already running your own ethereum node or have a hosted node (with providers such as Infura or Ankr), you can copy and paste your node url here. Please be aware that the default node set here is a public node on free tier, so it is highly recommended to use your own nodes.
 
-
 ## Woah, that was a lot!
 
 No worries, we have also recorded a [Youtube tutorial](https://youtu.be/_9RFjcls8vw) to help out (especially if you're a visual learner)
@@ -178,5 +181,4 @@ No worries, we have also recorded a [Youtube tutorial](https://youtu.be/_9RFjcls
 If you still need help, please feel free to ask for support in any of the following mediums.
 
 1. Raise an issue on this repo
-2. Our [Discord](https://discord.gg/KW5suDzsdp), where you may get the fastest response as of today
-3. Our email at support@dappy.lol
+2. Our [Discord](https://discord.gg/A4UqX4Pmpc), where you may get the fastest response as of today
